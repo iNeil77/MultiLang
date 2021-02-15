@@ -3,7 +3,7 @@
 ## Multi-label language detection using Gibbs sampling.
 
 
-This implementation uses a Byte-Pair subword tokenization scheme which can be reliably trained over a multi-lingual corpus and is robust to out of distribution words. It is trained on an unmodified language detectiondataset, where in each document has only a single language label. However, the model learns to approximate the generative process of texts in a specific language and come inference time, the model uncovers all the training languages that a document is likely a mixture of, above a configurable threshold.
+This implementation uses a Byte-Pair subword tokenization scheme which can be reliably trained over a multilingual corpus and is robust to out of distribution words. It is trained on an unmodified language detection dataset, where in each document has only a single language label. However, the model learns to approximate the generative process of texts in a specific language and come inference time, the model uncovers all the training languages that a document is likely a mixture of, above a configurable threshold.
 
 The generative process assumes that a given document is generated as a mixture of languages, each of which are generated from a mixture of words. The language-word conditional distribution is inferred using a maximum likelihood estimate on the training data, smoothed by an optional parameter GIBBS_BETA. The document-language conditional distribution on the other hand, is approximated using a Gibbs sampler, that runs for a configurable number of iterations and is smoothed by another optional parameter GIBBS_ALPHA.
 
@@ -11,9 +11,9 @@ The collapsed Gibbs sampling method has the following desirable qualities:
 
 * **Multi Label:** The generative procedure is able to model a mixture of languages emanating from a set of vocabulary words. This allows us to easily handle multi language scenarios which would otherwise either not be possible or be very involved, requiring multi-label classification.
 
-* **Robust to Sparse Data:** The gibbs sampling and the maximum likelihood procedure are not nearly as data hungry as a deep model would be. Additionally, configurable parameters such as GIBBS_ALPHA and GIBBS_BETA allow us to controllably smoothen the genrating distribution to mitigate the effects of sparsity.
+* **Robust to Sparse Data:** The gibbs sampling and the maximum likelihood procedure are not nearly as data hungry as a deep model would be. Additionally, configurable parameters such as GIBBS_ALPHA and GIBBS_BETA allow us to controllably smoothen the generating distribution to mitigate the effects of sparsity.
 
-* **Explainable:** Unlike deep learning models, attribution of words that influenced the language assignments the most, are readily accesible by definition. An inspection of the conditional probabilities would make it very clear.
+* **Explainable:** Unlike deep learning models, attribution of words that influenced the language assignments the most, are readily accessible by definition. An inspection of the conditional probabilities would make it very clear.
 
 This repository implements a learner for a generative model representing multiple languages over documents as published at https://www.aclweb.org/anthology/Q14-1003.pdf. Cite the original work as follows:
 
