@@ -53,7 +53,6 @@ class MultiLangLearner:
 
         Parameters
         ----------
-
         config: Configuration
             The configuration object.
         """
@@ -86,7 +85,7 @@ class MultiLangLearner:
 
         Returns
         -------
-        encode_list: List[int]
+        encode_list: list[int]
             Subword tokens of the cleaned document, featurized in the Byte-Pair space.
         """
 
@@ -112,15 +111,20 @@ class MultiLangLearner:
                         config: Configuration,
                         parser: Tokenizer) -> numpy.ndarray:
         """
+        Iterates over all documents in the training corpus, tokenizes them using a sub-routine and stores the
+        smoothed maximum-likelihood estimates.
 
         Parameters
         ----------
-        config
-        parser
+        config: Configuration
+            The configuration object.
+        parser: Tokenizer
+            The configuration object.
 
         Returns
         -------
-
+        frequency_history: numpy.ndarray
+            The smoothed language-word co-occurence matrix.
         """
 
         lang_set = config.CORPUS_LANGUAGES
@@ -143,16 +147,22 @@ class MultiLangLearner:
                        frequency_history: numpy.ndarray,
                        encoding: List[int]) -> List[numpy.ndarray]:
         """
+        Runs the smoothed Gibbs sampler to approximate the language-word generative distribution, over a configurable
+        number of iterations.
 
         Parameters
         ----------
-        config
-        frequency_history
-        encoding
+        config: Configuration
+            The configuration object.
+        frequency_history: numpy.ndarray
+            The smoothed language-word co-occurence matrix.
+        encoding: list[int]
+            Subword tokens of the cleaned document, featurized in the Byte-Pair space.
 
         Returns
         -------
-
+        final_dict: dict[str, int]
+            Language probabilities.
         """
 
         document_bag_of_words = numpy.bincount(encoding, minlength=config.VOCAB_SIZE)
@@ -182,14 +192,18 @@ class MultiLangLearner:
     def infer_language_distribution(self,
                                     doc_path: str) -> Dict[str, int]:
         """
+        Infers document language labels by invoking the gibbs sampler sub-routine and thresholding the probabilities
+        based on the configured threshold.
 
         Parameters
         ----------
-        doc_path
+        doc_path: str
+            The file path to the document.
 
         Returns
         -------
-
+        result_dict: dict[str, int]
+            Language probabilities thresholded by configuration threshold.
         """
 
         document_encoding = copy.deepcopy(self._process_document(self.configuration, doc_path, self.parser))
